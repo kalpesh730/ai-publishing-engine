@@ -1,0 +1,83 @@
+.thread-container {
+  background: #ffffff;
+  border: 1px solid #e1e8ed;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.section-title {
+  color: #1da1f2;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.thread-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tweet-card {
+  border: 1px solid #e1e8ed;
+  border-radius: 12px;
+  padding: 15px;
+  background: #f8f9fa;
+  position: relative;
+}
+
+/* Adds the thread line connecting tweets */
+.tweet-card:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 38px;
+  top: 55px;
+  bottom: -15px;
+  width: 2px;
+  background: #ccd6dd;
+}
+
+.tweet-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1da1f2;
+}
+
+.author-info strong {
+  color: #14171a;
+  display: block;
+}
+
+.author-info .handle {
+  color: #657786;
+  font-size: 0.9em;
+}
+
+.tweet-text {
+  color: #14171a;
+  line-height: 1.5;
+  margin: 0 0 0 50px;
+  white-space: pre-wrap;
+}
+
+.hashtags-container {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e1e8ed;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hashtag {
+  color: #1da1f2;
+  font-weight: 500;
+}

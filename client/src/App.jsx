@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// 1. Naye Modular Components Import Kiye Hain
+import BlogPreview from "./component/BlogPreview/BlogPreview";
+import ThreadPreview from "./component/ThreadPreview/ThreadPreview";
+
 function App() {
   const [draft, setDraft] = useState(null);
   const [topic, setTopic] = useState("");
@@ -23,14 +27,14 @@ function App() {
 
   // Main Generation Function
   const handleGenerate = async () => {
-    // 1. Frontend Validation (Prevent empty 400 Bad Request)
+    // 1. Frontend Validation
     if (!topic.trim()) {
       setError("Please enter a valid topic before generating.");
       return;
     }
 
     setLoading(true);
-    setError(null); // Clear previous errors
+    setError(null);
 
     try {
       // 2. Send Request
@@ -38,16 +42,14 @@ function App() {
         topic: topic.trim(),
       });
 
-      // 3. Immediately show the generated data from the response!
-      // Response.data mein backend se seedha wo JSON aayega jo AI ne banaya hai
+      // 3. Update State
       setDraft(response.data);
-      setTopic(""); // Input field clear kar do
+      setTopic("");
     } catch (err) {
       console.error("Generation Error:", err);
-      // Agar API se specific error aaya hai toh wo dikhao, warna generic error
       setError(
         err.response?.data?.error ||
-          "Error generating content. Please try again.",
+          "Error generating content. Please try again."
       );
     } finally {
       setLoading(false);
@@ -58,7 +60,7 @@ function App() {
     <div
       style={{
         fontFamily: "system-ui, sans-serif",
-        maxWidth: "800px",
+        maxWidth: "900px", // Thoda width badha diya taaki cards achhe dikhein
         margin: "0 auto",
         padding: "40px 20px",
       }}
@@ -84,7 +86,7 @@ function App() {
           value={topic}
           onChange={(e) => {
             setTopic(e.target.value);
-            if (error) setError(null); // Type karte hi error hata do
+            if (error) setError(null);
           }}
           placeholder="e.g., Why AI agents are the future of FinTech"
           disabled={loading}
@@ -131,33 +133,23 @@ function App() {
         </div>
       )}
 
-      {/* Draft Preview Area */}
-      {/* Draft Preview Area */}
+      {/* 2. REFACTORED: Naya Modular Preview Area */}
       <div style={{ marginTop: "40px" }}>
-        <h3 style={{ color: "#374151", marginBottom: "15px" }}>Latest Draft Output</h3>
         
-        {draft && draft.blog ? (
-          <div style={{ 
-            border: "1px solid #e5e7eb", 
-            borderRadius: "12px", 
-            padding: "30px", 
-            backgroundColor: "#ffffff",
-            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
-          }}>
-            <h2 style={{ marginTop: 0, color: "#1f2937" }}>{draft.blog.title}</h2>
+        {draft ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
+            {/* ThreadPreview Component: X/Twitter ka data pass kiya */}
+            {draft.twitter && <ThreadPreview twitterData={draft.twitter} />}
             
-            {/* 👇 YAHAN EXACT FIX APPLY KIYA HAI 👇 */}
-            <div 
-              style={{ color: "#4b5563", lineHeight: "1.6" }}
-              dangerouslySetInnerHTML={{ __html: draft.blog.htmlContent || draft.blog.content || "" }}
-            />
-            
+            {/* BlogPreview Component: Blog ka data pass kiya */}
+            {draft.blog && <BlogPreview blogData={draft.blog} />}
           </div>
         ) : (
           <div style={{ textAlign: "center", padding: "40px", color: "#9ca3af", border: "2px dashed #e5e7eb", borderRadius: "12px" }}>
             No drafts generated yet. Enter a topic above to start the engine.
           </div>
         )}
+        
       </div>
     </div>
   );

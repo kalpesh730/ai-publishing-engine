@@ -1,15 +1,10 @@
 const { GoogleGenAI } = require("@google/genai");
 
-// Initialize the SDK with the key from your .env file
+// Teri AQ. wali secure key aur naya SDK yahan properly bind honge
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-/**
- * Generates a full blog post and Twitter thread from a single topic
- * @param {string} topic - The news topic or SaaS tool to write about
- * @returns {object} - The parsed JSON object containing the blog and tweets
- */
 async function generateOmnichannelContent(topic) {
-  console.log(`[AI Service] Generating content for: ${topic}...`);
+  console.log(`[AI Service] Generating content for: "${topic}"...`);
 
   const systemInstruction = `
     You are an expert B2B SaaS and Wealth Tech editor. 
@@ -36,24 +31,24 @@ async function generateOmnichannelContent(topic) {
   `;
 
   try {
+    // Wapas tere original aur sahi model par aa gaye hain
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: `Topic to cover today: ${topic}`,
       config: {
         systemInstruction: systemInstruction,
-        // This forces the API to strictly return JSON format
         responseMimeType: "application/json",
         temperature: 0.7,
       },
     });
 
-    // Parse the API's text response into a usable JavaScript object
+    // Parse the API's text response
     const generatedData = JSON.parse(response.text);
-    console.log(`[AI Service] Successfully generated content.`);
+    console.log(`[AI Service] ✅ Successfully generated and parsed content!`);
 
     return generatedData;
   } catch (error) {
-    console.error("[AI Service] Error generating content:", error);
+    console.error("[AI Service] ❌ Error generating content:", error);
     throw error;
   }
 }
